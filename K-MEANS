@@ -1,0 +1,34 @@
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+X, _ = load_iris(return_X_y=True)
+
+# Elbow Method to find optimal number of clusters
+inertias = []
+for k in range(1, 11):
+    km = KMeans(n_clusters=k, n_init=10, random_state=42)
+    km.fit(X)
+    inertias.append(km.inertia_)
+
+plt.plot(range(1, 11), inertias, 'bo-')
+plt.title('Elbow Method')
+plt.xlabel('Number of Clusters')
+plt.ylabel('Inertia')
+plt.grid(True)
+plt.show()
+
+# Apply KMeans with k=3
+kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)
+labels = kmeans.fit_predict(X)
+centroids = kmeans.cluster_centers_
+
+# Plot clusters
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis')
+plt.scatter(centroids[:, 0], centroids[:, 1], marker='X', s=200, c='red')
+plt.title('K-means Clustering')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.grid(True)
+plt.show()
