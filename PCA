@@ -1,0 +1,25 @@
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load the Iris dataset
+X, y = load_iris(return_X_y=True)
+
+# Standardize the features
+X_scaled = StandardScaler().fit_transform(X)
+
+# Apply PCA to reduce to 2 components
+X_pca = PCA(n_components=2).fit_transform(X_scaled)
+
+# Plot the PCA-transformed data
+plt.figure(figsize=(8, 6))
+for label in np.unique(y):
+    plt.scatter(X_pca[y == label, 0], X_pca[y == label, 1], label=f'Class {label}')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('PCA on Iris Dataset')
+plt.legend()
+plt.grid(True)
+plt.show()
