@@ -1,0 +1,31 @@
+import pandas as pd
+
+data = pd.read_csv("enjoysport.csv")
+concepts = data.iloc[:, :-1].values
+target = data.iloc[:, -1].values
+
+def candidate_elimination(concepts, target):
+    s = concepts[0].copy()
+    g = [['?' for _ in range(len(s))]]
+    
+    for i, h in enumerate(concepts):
+        if target[i].lower() == 'yes':
+            for j in range(len(s)):
+                if s[j] != h[j]:
+                    s[j] = '?'
+        else:
+            new_g = []
+            for gen in g:
+                for j in range(len(gen)):
+                    if gen[j] == '?':
+                        if s[j] != h[j]:
+                            new_hypo = gen.copy()
+                            new_hypo[j] = s[j]
+                            if new_hypo not in new_g:
+                                new_g.append(new_hypo)
+            g = new_g
+    return s, g
+
+s_final, g_final = candidate_elimination(concepts, target)
+print("S-final:", s_final)
+print("G-final:", g_final)
