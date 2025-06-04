@@ -1,0 +1,24 @@
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load Iris dataset
+x, y = load_iris(return_X_y=True)
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=42)
+
+# Standardize the features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train SVM classifier
+clf = SVC(kernel='rbf')
+clf.fit(X_train_scaled, y_train)
+
+# Predict and evaluate
+y_pred = clf.predict(X_test_scaled)
+print("Accuracy:", accuracy_score(y_test, y_pred))
